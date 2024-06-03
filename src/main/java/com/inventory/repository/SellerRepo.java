@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SellerRepo extends JpaRepository<Seller,Long> {
 
-    public Seller findByUserName(String username);
+    public Seller findByEmail(String email);
 
 }

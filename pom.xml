@@ -11,7 +11,7 @@
 	<groupId>com.inventory</groupId>
 	<artifactId>Inventory_management_system</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Inventory_management_system</name>
+	<email>Inventory_management_system</email>
 	<description>Demo project fro IMS</description>
 	<properties>
 		<java.version>17</java.version>

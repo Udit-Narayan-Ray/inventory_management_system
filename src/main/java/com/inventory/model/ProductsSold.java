@@ -16,10 +16,13 @@ public class ProductsSold {
     @JoinColumn(name = "sell_id")
     private List<ProductsSoldDetails> productsSoldDetails;
 
+    private double totalCost;
+
     private String customerName;
 
     @Column(nullable = false)
     private String customerPhoneNo;
+
 
     @OneToOne(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
     @JoinColumn(name = "seller_id")

@@ -1,10 +1,9 @@
 package com.inventory.model;
 
-import com.inventory.enums.Roles;
+import com.inventory.enums.Role;
 import jakarta.persistence.*;
 
 import java.util.Date;
-import java.util.List;
 
 @Entity
 public class Seller {
@@ -14,20 +13,18 @@ public class Seller {
     private Long sellerId;
 
     @Column(nullable = false)
-    private String sellerName;
+    private String userName;
 
     @Column(unique = true,nullable = false)
-    private String userName;
+    private String email;
 
     @Column(nullable = false)
     private String password;
 
     @Column(nullable = false)
-    private String phoneNo;
+    private Role role;
 
-    @Column(nullable = false)
-    private Roles roles;
-
+    private boolean isActive;
 
     @Column(nullable = false)
     private Date createdAt;
@@ -37,14 +34,14 @@ public class Seller {
     public Seller() {
     }
 
-    public Seller(Long sellerId, String sellerName, String userName, String password,
-                  String phoneNo, Roles roles, Date createdAt, Date updateAt) {
+    public Seller(Long sellerId, String userName, String email, String password,
+                   Role role, boolean isActive, Date createdAt, Date updateAt) {
         this.sellerId = sellerId;
-        this.sellerName = sellerName;
         this.userName = userName;
+        this.email = email;
         this.password = password;
-        this.phoneNo = phoneNo;
-        this.roles = roles;
+        this.role = role;
+        this.isActive = isActive;
         this.createdAt = createdAt;
         this.updateAt = updateAt;
     }
@@ -57,20 +54,20 @@ public class Seller {
         this.sellerId = sellerId;
     }
 
-    public String getSellerName() {
-        return sellerName;
-    }
-
-    public void setSellerName(String sellerName) {
-        this.sellerName = sellerName;
-    }
-
     public String getUserName() {
         return userName;
     }
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -81,20 +78,20 @@ public class Seller {
         this.password = password;
     }
 
-    public String getPhoneNo() {
-        return phoneNo;
+//    public String getPhoneNo() {
+//        return phoneNo;
+//    }
+//
+//    public void setPhoneNo(String phoneNo) {
+//        this.phoneNo = phoneNo;
+//    }
+
+    public Role getRole() {
+        return role;
     }
 
-    public void setPhoneNo(String phoneNo) {
-        this.phoneNo = phoneNo;
-    }
-
-    public Roles getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Roles roles) {
-        this.roles = roles;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public Date getCreatedAt() {
@@ -113,15 +110,25 @@ public class Seller {
         this.updateAt = updateAt;
     }
 
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
     @Override
     public String toString() {
         return "Seller{" +
                 "sellerId=" + sellerId +
-                ", sellerName='" + sellerName + '\'' +
                 ", userName='" + userName + '\'' +
+                ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", phoneNo='" + phoneNo + '\'' +
-                ", roles=" + roles +
+//                ", phoneNo='" + phoneNo + '\'' +
+                ", roles=" + role +
+                ", isActive=" + isActive +
                 ", createdAt=" + createdAt +
                 ", updateAt=" + updateAt +
                 '}';
