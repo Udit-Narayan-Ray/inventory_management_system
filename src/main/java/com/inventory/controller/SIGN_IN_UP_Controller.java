@@ -35,9 +35,10 @@ public class SIGN_IN_UP_Controller {
         if(!this.passwordEncoder.matches(sellerDto.getPassword(), sellerDto1.getPassword())){
             throw new Generic_Exception_Handling("Bad credentials ! Check Password");
         }
-        sellerDto.setGeneratedToken(this.jwtService.generateToken(sellerDto.getEmail()));
+        String generatedToken = this.jwtService.generateToken(sellerDto.getEmail());
 
-        return new ResponseEntity(new TokenDto(sellerDto1.getUserName(),sellerDto.getEmail(),sellerDto.getGeneratedToken()), HttpStatus.OK);
+        return new ResponseEntity(new TokenDto(sellerDto1.getSellerId(),sellerDto1.getUserName(),sellerDto.getEmail(),generatedToken
+        ), HttpStatus.OK);
     }
 
     @PostMapping(path = "/signup")

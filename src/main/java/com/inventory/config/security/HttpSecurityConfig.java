@@ -70,6 +70,7 @@ public class HttpSecurityConfig {
         corsConfiguration.setAllowedOrigins(List.of("http://localhost:8080","http://localhost:3000"));
 
 
+
         UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource
                 =new UrlBasedCorsConfigurationSource();
 

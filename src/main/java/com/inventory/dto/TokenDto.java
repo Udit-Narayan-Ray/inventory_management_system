@@ -1,17 +1,20 @@
 package com.inventory.dto;
 
 public class TokenDto {
+
+    private Long sellerId;
     private String userName;
     private String email;
-    private String generatedToken;
+    private String jwtToken;
 
     public TokenDto() {
     }
 
-    public TokenDto(String userName, String email, String generatedToken) {
+    public TokenDto(Long sellerId, String userName, String email, String jwtToken) {
+        this.sellerId = sellerId;
         this.userName = userName;
         this.email = email;
-        this.generatedToken = generatedToken;
+        this.jwtToken = jwtToken;
     }
 
     public String getUserName() {
@@ -30,20 +33,30 @@ public class TokenDto {
         this.email = email;
     }
 
-    public String getGeneratedToken() {
-        return generatedToken;
+    public String getJwtToken() {
+        return jwtToken;
     }
 
-    public void setGeneratedToken(String generatedToken) {
-        this.generatedToken = generatedToken;
+    public void setJwtToken(String jwtToken) {
+        this.jwtToken = jwtToken;
+    }
+
+
+    public Long getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(Long sellerId) {
+        this.sellerId = sellerId;
     }
 
     @Override
     public String toString() {
         return "TokenDto{" +
-                "userName='" + userName + '\'' +
+                "sellerId='" + sellerId + '\'' +
+                ", userName='" + userName + '\'' +
                 ", email='" + email + '\'' +
-                ", generatedToken='" + generatedToken + '\'' +
+                ", jwtToken='" + jwtToken + '\'' +
                 '}';
     }
 }

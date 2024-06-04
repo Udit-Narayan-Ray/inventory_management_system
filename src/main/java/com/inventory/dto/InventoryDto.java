@@ -1,5 +1,7 @@
 package com.inventory.dto;
 
+import com.inventory.model.Seller;
+
 public class InventoryDto {
 
     private Long productId;
@@ -20,21 +22,9 @@ public class InventoryDto {
 
     private String productCode;
 
-    public InventoryDto() {
-    }
+    private SellerDto createdBy;
 
-    public InventoryDto(Long productId, String productName, double costPrice,
-                        double sellingPrice, int minQuantity, int quantity, String productType, boolean isActive, String productCode) {
-        this.productId = productId;
-        this.productName = productName;
-        this.costPrice = costPrice;
-        this.sellingPrice = sellingPrice;
-        this.minQuantity = minQuantity;
-        this.quantity = quantity;
-        this.productType = productType;
-        this.isActive = isActive;
-        this.productCode = productCode;
-    }
+    private Long adminId;
 
     public Long getProductId() {
         return productId;
@@ -101,11 +91,19 @@ public class InventoryDto {
     }
 
     public String getProductCode() {
-        return productCode;
+        return "PC-"+productId;
     }
 
     public void setProductCode(String productCode) {
         this.productCode = productCode;
+    }
+
+    public Long getAdminId() {
+        return adminId;
+    }
+
+    public void setAdminId(Long adminId) {
+        this.adminId = adminId;
     }
 
     @Override
@@ -120,6 +118,15 @@ public class InventoryDto {
                 ", productType='" + productType + '\'' +
                 ", isActive=" + isActive +
                 ", productCode='" + productCode + '\'' +
+                ", adminId=" + adminId +
                 '}';
+    }
+
+    public SellerDto getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(SellerDto createdBy) {
+        this.createdBy = createdBy;
     }
 }

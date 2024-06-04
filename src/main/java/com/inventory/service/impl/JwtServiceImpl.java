@@ -16,7 +16,7 @@ import java.util.function.Function;
 public class JwtServiceImpl implements JwtService {
 
     //    public static final long JWT_TOKEN_VALIDITY HH * MM * SS * ss;
-    public static final long JWT_TOKEN_VALIDITY = 1 * 1 * 30 * 1000 ;
+    public static final long JWT_TOKEN_VALIDITY = 1 * 3 * 60 * 1000 ;
 
     // secret for generating token
     @Value("${spring.jwt.secret-key}")

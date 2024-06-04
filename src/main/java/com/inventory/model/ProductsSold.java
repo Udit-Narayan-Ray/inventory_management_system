@@ -36,10 +36,11 @@ public class ProductsSold {
     public ProductsSold() {
     }
 
-    public ProductsSold(Long sellId, List<ProductsSoldDetails> productsSoldDetails,
+    public ProductsSold(Long sellId, List<ProductsSoldDetails> productsSoldDetails, double totalCost,
                         String customerName, String customerPhoneNo, Seller createdBy, Date createAt, Date updateAt) {
         this.sellId = sellId;
         this.productsSoldDetails = productsSoldDetails;
+        this.totalCost = totalCost;
         this.customerName = customerName;
         this.customerPhoneNo = customerPhoneNo;
         this.createdBy = createdBy;
@@ -103,11 +104,21 @@ public class ProductsSold {
         this.updateAt = updateAt;
     }
 
+
+    public double getTotalCost() {
+        return totalCost;
+    }
+
+    public void setTotalCost(double totalCost) {
+        this.totalCost = totalCost;
+    }
+
     @Override
     public String toString() {
         return "ProductsSold{" +
                 "sellId=" + sellId +
                 ", productsSoldDetails=" + productsSoldDetails +
+                ", totalCost=" + totalCost +
                 ", customerName='" + customerName + '\'' +
                 ", customerPhoneNo='" + customerPhoneNo + '\'' +
                 ", createdBy=" + createdBy +

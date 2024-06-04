@@ -2,15 +2,15 @@ package com.inventory.dto;
 
 import java.util.Date;
 
-public class ResponseDto {
+public class ErrorResponseDto {
     private Throwable cause;
     private String message;
     private Date date;
 
-    public ResponseDto() {
+    public ErrorResponseDto() {
     }
 
-    public ResponseDto(Throwable cause, String message, Date date) {
+    public ErrorResponseDto(Throwable cause, String message, Date date) {
         this.cause = cause;
         this.message = message;
         this.date = date;

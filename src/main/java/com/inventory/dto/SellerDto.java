@@ -4,21 +4,21 @@ import com.inventory.enums.Role;
 
 public class SellerDto {
 
+    private Long sellerId;
     private String userName;
     private String email;
     private String password;
     private Role role;
-    private String generatedToken;
 
     public SellerDto() {
     }
 
-    public SellerDto(String userName, String email, String password, String generatedToken,Role role) {
+    public SellerDto(Long sellerId, String userName, String email, String password, Role role) {
+        this.sellerId = sellerId;
         this.userName = userName;
         this.email = email;
         this.password = password;
         this.role = role;
-        this.generatedToken = generatedToken;
     }
 
     public String getEmail() {
@@ -53,22 +53,22 @@ public class SellerDto {
         this.userName = userName;
     }
 
-    public String getGeneratedToken() {
-        return generatedToken;
+     public Long getSellerId() {
+        return sellerId;
     }
 
-    public void setGeneratedToken(String generatedToken) {
-        this.generatedToken = generatedToken;
+    public void setSellerId(Long sellerId) {
+        this.sellerId = sellerId;
     }
 
     @Override
     public String toString() {
         return "SellerDto{" +
-                "userName='" + userName + '\'' +
+                "sellerId=" + sellerId +
+                ", userName='" + userName + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-//                ", role=" + role +
-                ", generatedToken="+generatedToken+
+                ", role=" + role +
                 '}';
     }
 }

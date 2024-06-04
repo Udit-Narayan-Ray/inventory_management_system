@@ -6,7 +6,11 @@ import java.util.List;
 
 public interface InventoryService {
 
-    public void saveProduct(InventoryDto inventoryDto);
+    public void addProduct(InventoryDto inventoryDto);
+
+    public void updateProduct(InventoryDto inventoryDto);
+
+    public InventoryDto getProducts(Long productId);
 
     public List<InventoryDto> getAllProducts();
 }
