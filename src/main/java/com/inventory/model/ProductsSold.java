@@ -14,15 +14,16 @@ public class ProductsSold {
 
     @OneToMany(cascade = CascadeType.PERSIST,fetch = FetchType.LAZY)
     @JoinColumn(name = "sell_id")
-    private List<ProductsSoldDetails> productsSoldDetails;
+    private List<ProductsSoldDetails> products;
 
     private double totalCost;
 
     private String customerName;
 
     @Column(nullable = false)
-    private String customerPhoneNo;
+    private String phoneNo;
 
+    private String description;
 
     @OneToOne(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
     @JoinColumn(name = "seller_id")
@@ -36,13 +37,14 @@ public class ProductsSold {
     public ProductsSold() {
     }
 
-    public ProductsSold(Long sellId, List<ProductsSoldDetails> productsSoldDetails, double totalCost,
-                        String customerName, String customerPhoneNo, Seller createdBy, Date createAt, Date updateAt) {
+    public ProductsSold(Long sellId, List<ProductsSoldDetails> products, double totalCost,
+                        String customerName, String phoneNo, String description, Seller createdBy, Date createAt, Date updateAt) {
         this.sellId = sellId;
-        this.productsSoldDetails = productsSoldDetails;
+        this.products = products;
         this.totalCost = totalCost;
         this.customerName = customerName;
-        this.customerPhoneNo = customerPhoneNo;
+        this.phoneNo = phoneNo;
+        this.description = description;
         this.createdBy = createdBy;
         this.createAt = createAt;
         this.updateAt = updateAt;
@@ -56,12 +58,12 @@ public class ProductsSold {
         this.sellId = sellId;
     }
 
-    public List<ProductsSoldDetails> getProductsSoldDetails() {
-        return productsSoldDetails;
+    public List<ProductsSoldDetails> getProducts() {
+        return products;
     }
 
-    public void setProductsSoldDetails(List<ProductsSoldDetails> productsSoldDetails) {
-        this.productsSoldDetails = productsSoldDetails;
+    public void setProducts(List<ProductsSoldDetails> products) {
+        this.products = products;
     }
 
     public String getCustomerName() {
@@ -72,12 +74,12 @@ public class ProductsSold {
         this.customerName = customerName;
     }
 
-    public String getCustomerPhoneNo() {
-        return customerPhoneNo;
+    public String getPhoneNo() {
+        return phoneNo;
     }
 
-    public void setCustomerPhoneNo(String customerPhoneNo) {
-        this.customerPhoneNo = customerPhoneNo;
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
     }
 
     public Seller getCreatedBy() {
@@ -112,18 +114,28 @@ public class ProductsSold {
     public void setTotalCost(double totalCost) {
         this.totalCost = totalCost;
     }
+    public String getDescription() {
+        return description;
+    }
+
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     @Override
     public String toString() {
         return "ProductsSold{" +
                 "sellId=" + sellId +
-                ", productsSoldDetails=" + productsSoldDetails +
+                ", products=" + products +
                 ", totalCost=" + totalCost +
                 ", customerName='" + customerName + '\'' +
-                ", customerPhoneNo='" + customerPhoneNo + '\'' +
+                ", phoneNo='" + phoneNo + '\'' +
+                ", description='" + description + '\'' +
                 ", createdBy=" + createdBy +
                 ", createAt=" + createAt +
                 ", updateAt=" + updateAt +
                 '}';
     }
+
 }

@@ -24,7 +24,7 @@ public class Seller {
     @Column(nullable = false)
     private Role role;
 
-    private boolean isActive;
+    private boolean active;
 
     @Column(nullable = false)
     private Date createdAt;
@@ -35,13 +35,13 @@ public class Seller {
     }
 
     public Seller(Long sellerId, String userName, String email, String password,
-                   Role role, boolean isActive, Date createdAt, Date updateAt) {
+                   Role role, boolean active, Date createdAt, Date updateAt) {
         this.sellerId = sellerId;
         this.userName = userName;
         this.email = email;
         this.password = password;
         this.role = role;
-        this.isActive = isActive;
+        this.active = active;
         this.createdAt = createdAt;
         this.updateAt = updateAt;
     }
@@ -112,11 +112,11 @@ public class Seller {
 
 
     public boolean isActive() {
-        return isActive;
+        return active;
     }
 
     public void setActive(boolean active) {
-        isActive = active;
+        this.active = active;
     }
 
     @Override
@@ -128,7 +128,7 @@ public class Seller {
                 ", password='" + password + '\'' +
 //                ", phoneNo='" + phoneNo + '\'' +
                 ", roles=" + role +
-                ", isActive=" + isActive +
+                ", active=" + active +
                 ", createdAt=" + createdAt +
                 ", updateAt=" + updateAt +
                 '}';

@@ -1,6 +1,6 @@
 package com.inventory.dto;
 
-import com.inventory.model.Seller;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class InventoryDto {
 
@@ -12,6 +12,9 @@ public class InventoryDto {
 
     private double sellingPrice;
 
+    private int minimumQuantity;
+
+    @JsonIgnore
     private int minQuantity;
 
     private int quantity;
@@ -22,7 +25,9 @@ public class InventoryDto {
 
     private String productCode;
 
+    @JsonIgnore
     private SellerDto createdBy;
+
 
     private Long adminId;
 
@@ -82,12 +87,12 @@ public class InventoryDto {
         this.productType = productType;
     }
 
-    public boolean isActive() {
+    public boolean getIsActive() {
         return isActive;
     }
 
-    public void setActive(boolean active) {
-        isActive = active;
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
     }
 
     public String getProductCode() {
@@ -104,6 +109,13 @@ public class InventoryDto {
 
     public void setAdminId(Long adminId) {
         this.adminId = adminId;
+    }
+    public SellerDto getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(SellerDto createdBy) {
+        this.createdBy = createdBy;
     }
 
     @Override
@@ -122,11 +134,16 @@ public class InventoryDto {
                 '}';
     }
 
-    public SellerDto getCreatedBy() {
-        return createdBy;
+
+    public int getMinimumQuantity() {
+        return minQuantity;
     }
 
-    public void setCreatedBy(SellerDto createdBy) {
-        this.createdBy = createdBy;
+    public void setMinimumQuantity(int minimumQuantity) {
+        this.minimumQuantity = minimumQuantity;
+        this.minQuantity = minimumQuantity;
     }
+
+
+
 }

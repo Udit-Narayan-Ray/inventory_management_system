@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,6 +39,17 @@ public class SellerServiceImpl implements SellerService {
         }else {
             return this.modelMapper.map(seller, SellerDto.class);
         }
+    }
+
+    @Override
+    public SellerDto findSellerById(Long sellerId) {
+        Seller byId;
+        try {
+            byId = this.sellerRepo.findById(sellerId).get();
+        } catch (NoSuchElementException exception){
+            throw new Generic_Exception_Handling("Seller Does Not Exists with Seller ID : "+sellerId+", Please Send Correct AdminID");
+        }
+        return this.modelMapper.map(byId, SellerDto.class);
     }
 
     @Override

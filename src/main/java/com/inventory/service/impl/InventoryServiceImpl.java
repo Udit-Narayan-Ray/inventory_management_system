@@ -34,15 +34,21 @@ public class InventoryServiceImpl implements InventoryService {
         Inventory inventory = this.modelMapper.map(inventoryDto, Inventory.class);
         inventory.setCreatedAt(new Date());
         inventory.setUpdateAt(new Date());
-        inventory.setActive(true);
-
-        inventory.setCreatedBy(this.sellerRepo.findById(inventoryDto.getAdminId()).get());
+        inventory.setIsActive(inventoryDto.getIsActive()
+        );
+        try {
+            inventory.setCreatedBy(this.sellerRepo.findById(inventoryDto.getAdminId()).get());
+        }
+        catch (NoSuchElementException exception){
+            throw new Generic_Exception_Handling("No User Found With userId : "+inventoryDto.getAdminId());
+        }
 
         this.inventoryRepo.save(inventory);
     }
 
     @Override
     public void updateProduct(InventoryDto inventoryDto) {
+        System.out.println(inventoryDto);
         Inventory inventory;
         try {
             inventory = this.inventoryRepo.findById(inventoryDto.getProductId()).get();
@@ -52,10 +58,12 @@ public class InventoryServiceImpl implements InventoryService {
         if(inventoryDto.getQuantity() != 0 ){
             inventory.setQuantity(inventoryDto.getQuantity());
         }
-        if(inventoryDto.isActive()){
-            inventory.setActive(true);
+        if(inventoryDto.getIsActive() == true){
+            System.err.println("INTO TRUE "+inventoryDto.getIsActive());
+            inventory.setIsActive(true);
         }else {
-            inventory.setActive(false);
+            System.err.println("INTO FALSE "+inventoryDto.getIsActive());
+            inventory.setIsActive(false);
         }
         if((inventoryDto.getProductName()!=null || !inventoryDto.getProductName().equals("")) && !inventoryDto.getProductName().equals(inventory.getProductName())){
             inventory.setProductName(inventoryDto.getProductName());
@@ -77,7 +85,6 @@ public class InventoryServiceImpl implements InventoryService {
 
         inventory.setUpdateAt(new Date());
 
-        System.out.println(inventory);
 
         this.inventoryRepo.save(inventory);
 
@@ -95,17 +102,15 @@ public class InventoryServiceImpl implements InventoryService {
 
 
     @Override
-    public List<InventoryDto> getAllProducts() {
+    public List<InventoryDto> getAllProducts(Long sellerId) {
+
 
         List<InventoryDto> collect = this.inventoryRepo
-                .findAll()
+                .findAllByCreatedBy(sellerId)
                 .stream()
                 .map(product -> this.modelMapper.map(product, InventoryDto.class))
                 .collect(Collectors.toList());
 
-            for(InventoryDto inventoryDto:collect){
-                inventoryDto.setAdminId(inventoryDto.getCreatedBy().getSellerId());
-            }
         return collect;
 
     }

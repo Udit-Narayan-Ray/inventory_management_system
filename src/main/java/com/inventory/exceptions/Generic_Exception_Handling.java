@@ -2,6 +2,7 @@ package com.inventory.exceptions;
 
 import com.inventory.dto.ErrorResponseDto;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,10 +20,10 @@ public class Generic_Exception_Handling extends  RuntimeException{
         super(exceptionMessage);
     }
 
-    @ExceptionHandler({ExpiredJwtException.class, Generic_Exception_Handling.class})
+    @ExceptionHandler({ExpiredJwtException.class, Generic_Exception_Handling.class, JwtException.class})
     public ResponseEntity<ErrorResponseDto> handlingException(Generic_Exception_Handling exception){
         return  new ResponseEntity<>(
                 new ErrorResponseDto(exception.getCause(),exception.getMessage(),new Date())
-                , HttpStatus.INTERNAL_SERVER_ERROR);
+                , HttpStatus.BAD_REQUEST);
     }
 }

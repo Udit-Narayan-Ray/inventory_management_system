@@ -18,20 +18,14 @@ public class ProductsSoldDetails {
     @JoinColumn(name = "product_id")
     private Inventory inventory;
 
-    @Column(nullable = false)
-    private Date createdAt;
-
-    private Date updatedAt;
 
     public ProductsSoldDetails() {
     }
 
-    public ProductsSoldDetails(Long slNo, int quantity, Inventory inventory, Date createdAt, Date updatedAt) {
+    public ProductsSoldDetails(Long slNo, int quantity, Inventory inventory) {
         this.slNo = slNo;
         this.quantity = quantity;
         this.inventory = inventory;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     }
 
     public Long getSlNo() {
@@ -58,21 +52,6 @@ public class ProductsSoldDetails {
         this.inventory = inventory;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 
 
     @Override
@@ -81,8 +60,6 @@ public class ProductsSoldDetails {
                 "slNo=" + slNo +
                 ", quantity=" + quantity +
                 ", inventory=" + inventory +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
                 '}';
     }
 }
