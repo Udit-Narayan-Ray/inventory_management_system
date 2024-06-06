@@ -2,8 +2,6 @@ package com.inventory.model;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
-
 @Entity
 public class ProductsSoldDetails {
 
@@ -14,7 +12,7 @@ public class ProductsSoldDetails {
     @Column(nullable = false)
     private int quantity;
 
-    @OneToOne(cascade = CascadeType.PERSIST,fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.PERSIST,fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Inventory inventory;
 

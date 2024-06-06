@@ -1,7 +1,11 @@
 package com.inventory.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class TokenDto {
 
+    private Long adminId;
+    @JsonIgnore
     private Long sellerId;
     private String userName;
     private String email;
@@ -58,5 +62,13 @@ public class TokenDto {
                 ", email='" + email + '\'' +
                 ", jwtToken='" + jwtToken + '\'' +
                 '}';
+    }
+
+    public Long getAdminId() {
+        return this.sellerId;
+    }
+
+    public void setAdminId(Long adminId) {
+        this.adminId = sellerId;
     }
 }

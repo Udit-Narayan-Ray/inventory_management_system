@@ -25,7 +25,7 @@ public class ProductsSold {
 
     private String description;
 
-    @OneToOne(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
     @JoinColumn(name = "seller_id")
     private Seller createdBy;
 
@@ -112,6 +112,7 @@ public class ProductsSold {
     }
 
     public void setTotalCost(double totalCost) {
+
         this.totalCost = totalCost;
     }
     public String getDescription() {

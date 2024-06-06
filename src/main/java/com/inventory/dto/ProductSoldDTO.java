@@ -2,6 +2,8 @@ package com.inventory.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class ProductSoldDTO {
@@ -9,7 +11,7 @@ public class ProductSoldDTO {
 
         private Long adminId;
 
-        private String orderId;
+        private String transactionId;
 
         @JsonIgnore
         private Long sellId;
@@ -25,6 +27,12 @@ public class ProductSoldDTO {
 
         private String description;
 
+        private String date;
+
+        @JsonIgnore
+        private Date createAt;
+
+
         private List<ProductSoldDetailsDTO> products;
 
         public ProductSoldDTO() {
@@ -33,7 +41,7 @@ public class ProductSoldDTO {
         public ProductSoldDTO(Long adminId, String orderId, Long sellId, String customerName,
                               String phoneNo, double totalCost, String description, List<ProductSoldDetailsDTO> products) {
                 this.adminId = adminId;
-                this.orderId = orderId;
+                this.transactionId = orderId;
                 this.sellId = sellId;
                 this.customerName = customerName;
                 this.phoneNo = phoneNo;
@@ -50,12 +58,12 @@ public class ProductSoldDTO {
                 this.adminId = adminId;
         }
 
-        public String getOrderId() {
+        public String getTransactionId() {
                 return "OID-"+this.sellId;
         }
 
-        public void setOrderId(String orderId) {
-                this.orderId = orderId;
+        public void setTransactionId(String transactionId) {
+                this.transactionId = transactionId;
         }
 
         public Long getSellId() {
@@ -102,7 +110,7 @@ public class ProductSoldDTO {
         public String toString() {
                 return "ProductSoldDTO{" +
                         "adminId=" + adminId +
-                        ", orderId='" + orderId + '\'' +
+                        ", transactionId='" + transactionId + '\'' +
                         ", sellId=" + sellId +
                         ", customerName='" + customerName + '\'' +
                         ", phoneNo='" + phoneNo + '\'' +
@@ -112,18 +120,43 @@ public class ProductSoldDTO {
         }
 
         public double getTotalCost() {
-                return totalAmount;
+                if(totalCost == 0){
+                        return totalAmount;
+                }
+                return totalCost;
         }
 
         public void setTotalCost(double totalCost) {
-                this.totalCost = totalAmount;
+                this.totalCost = totalCost;
         }
 
         public double getTotalAmount() {
+                if(totalAmount == 0){
+                        return this.totalCost;
+                }
                 return totalAmount;
         }
 
         public void setTotalAmount(double totalAmount) {
                 this.totalAmount = totalAmount;
+        }
+
+        public String getDate() {
+                if(createAt != null){
+                        return new SimpleDateFormat("dd-MM-YYYY HH:mm:ss").format(this.createAt);
+                }
+                else return date;
+        }
+
+        public void setDate(String date) {
+                this.date = date;
+        }
+
+        public void setCreateAt(Date createAt) {
+                this.createAt = createAt;
+        }
+
+        public Date getCreateAt() {
+                return createAt;
         }
 }

@@ -19,9 +19,9 @@ public class ProductsSoldController {
 
     @PreAuthorize("hasRole('SELLER')")
     @PostMapping(path = "/sells")
-    public ResponseEntity<Object> placeOrder(@RequestBody ProductSoldDTO productSoldDTO, @RequestParam(value = "adminId",defaultValue = "0")Long adminId){
+    public ResponseEntity<Object> placeOrder(@RequestBody ProductSoldDTO productSoldDTO){
 
-        if(adminId == 0){
+        if(productSoldDTO.getAdminId() == null || productSoldDTO.getAdminId() == 0){
             throw new Generic_Exception_Handling("Please Provide Valid adminId");
         }
 

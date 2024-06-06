@@ -8,6 +8,9 @@ public class InvoiceProductDTO {
 
     private String productType;
 
+    public InvoiceProductDTO() {
+    }
+
     public InvoiceProductDTO(String productName, double sellingPrice, String productType) {
         this.productName = productName;
         this.sellingPrice = sellingPrice;

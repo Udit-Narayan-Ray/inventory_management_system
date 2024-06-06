@@ -2,8 +2,10 @@ package com.inventory.service.impl;
 
 import com.inventory.dto.ProductSoldDTO;
 import com.inventory.exceptions.Generic_Exception_Handling;
+import com.inventory.model.Inventory;
 import com.inventory.model.ProductsSold;
 import com.inventory.model.ProductsSoldDetails;
+import com.inventory.repository.InventoryRepo;
 import com.inventory.repository.ProductsSoldDetailsRepo;
 import com.inventory.repository.ProductsSoldRepo;
 import com.inventory.repository.SellerRepo;
@@ -12,9 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,6 +22,9 @@ public class ProductsSoldServiceImpl implements ProductsSoldService {
 
     @Autowired
     private ProductsSoldRepo productsSoldRepo;
+
+    @Autowired
+    private InventoryRepo inventoryRepo;
 
     @Autowired
     private ProductsSoldDetailsRepo productsSoldDetailsRepo;
@@ -45,14 +48,37 @@ public class ProductsSoldServiceImpl implements ProductsSoldService {
 
     @Override
     public void placeOrder(ProductSoldDTO productSoldDTO) {
-        System.err.println(productSoldDTO);
-
+        var ref = new Object() {
+            HashMap<Long,Integer> productIdQuantity =new HashMap<>();
+            double calculatedPrices = 0;
+        };
         ProductsSold productsSold = this.modelMapper.map(productSoldDTO, ProductsSold.class);
 
+
         productsSold.setProducts(
-                                productSoldDTO.getProducts()
-                                .stream()
-                                .map(sells->this.modelMapper.map(sells, ProductsSoldDetails.class)).toList());
+                productSoldDTO
+                .getProducts()
+                .stream()
+                .map(
+                        sells -> {
+                            ProductsSoldDetails productsSoldDetails = new ProductsSoldDetails();
+                            Inventory inventory;
+                            try {
+                                inventory = this.inventoryRepo.findById(sells.getProductId()).get();
+                                ref.calculatedPrices += inventory.getSellingPrice()*sells.getQuantity();
+                                ref.productIdQuantity.put(inventory.getProductId(),sells.getQuantity());
+                                productsSoldDetails.setInventory(inventory);
+                            } catch (NoSuchElementException exception) {
+                                throw new Generic_Exception_Handling("No Product Exist With ProductId :" + sells.getProductId());
+                            }
+                            if((inventory.getQuantity()-sells.getQuantity())>=0) {
+                                productsSoldDetails.setQuantity(sells.getQuantity());
+                            }else{
+                                throw new Generic_Exception_Handling("Quantity Provided for the productId : "+sells.getProductId()+" is More than Current Stock");
+                            }
+                            return productsSoldDetails;
+                        })
+                .collect(Collectors.toList()));
 
         try {
             productsSold.setCreatedBy(this.sellerRepo.findById(productSoldDTO.getAdminId()).get());
@@ -62,7 +88,16 @@ public class ProductsSoldServiceImpl implements ProductsSoldService {
         }
         productsSold.setCreateAt(new Date());
         productsSold.setUpdateAt(new Date());
-        System.out.println(productsSold);
+        if(productSoldDTO.getTotalAmount() == ref.calculatedPrices){
+            this.productsSoldRepo.save(productsSold);
+           for(Map.Entry entry:ref.productIdQuantity.entrySet() ){
+                            Inventory inventory = this.inventoryRepo.findById((Long) entry.getKey()).get();
+                            inventory.setQuantity(inventory.getQuantity()-(int)entry.getValue());
+                            this.inventoryRepo.save(inventory);
+                        }
+        }else {
+            throw new Generic_Exception_Handling("Calculated Amount For Sells is Wrong, Please Recheck It");
+        }
 
     }
 

@@ -11,4 +11,6 @@ public interface ProductsSoldRepo extends JpaRepository<ProductsSold,Long> {
 
     @Query("select order from ProductsSold order inner join order.createdBy s where s.sellerId = :sellerId")
     public List<ProductsSold> findAllByCreatedBy(@Param("sellerId")Long sellerId);
+
+
 }
