@@ -22,6 +22,8 @@ public class ProductSoldDTO {
 
         private double totalAmount;
 
+        private long totalBills;
+
         @JsonIgnore
         private double totalCost;
 
@@ -31,8 +33,6 @@ public class ProductSoldDTO {
 
         @JsonIgnore
         private Date createAt;
-
-
         private List<ProductSoldDetailsDTO> products;
 
         public ProductSoldDTO() {
@@ -158,5 +158,13 @@ public class ProductSoldDTO {
 
         public Date getCreateAt() {
                 return createAt;
+        }
+
+        public long getTotalBills() {
+                return totalBills;
+        }
+
+        public void setTotalBills(long totalBills) {
+                this.totalBills = totalBills;
         }
 }

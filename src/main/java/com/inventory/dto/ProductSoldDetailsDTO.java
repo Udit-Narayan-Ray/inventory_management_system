@@ -7,6 +7,8 @@ public class ProductSoldDetailsDTO {
 
     private Long productId;
 
+    private String productCode;
+
     private int quantity;
 
     private String productName;
@@ -98,5 +100,13 @@ public class ProductSoldDetailsDTO {
 
     public void setProductType(String productType) {
         this.productType = productType;
+    }
+
+    public String getProductCode() {
+        return this.inventory == null?productCode:"PC-"+this.inventory.getProductId();
+    }
+
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
     }
 }

@@ -12,8 +12,12 @@ import com.inventory.repository.SellerRepo;
 import com.inventory.service.ProductsSoldService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -36,14 +40,54 @@ public class ProductsSoldServiceImpl implements ProductsSoldService {
     private ModelMapper modelMapper;
 
     @Override
-    public List<ProductSoldDTO> getSells(Long adminId) {
-        List<ProductSoldDTO> collect = this.productsSoldRepo
-                .findAllByCreatedBy(adminId)
-                .stream()
-                .map(order -> this.modelMapper.map(order, ProductSoldDTO.class))
-                .collect(Collectors.toList());
+    public List<ProductSoldDTO> getSells(Long adminId, String customerName, String date,int page, int size)  {
+        List<ProductSoldDTO> collect = null;
 
-        return collect;
+        PageRequest pageRequest =PageRequest.of(page,size, Sort.Direction.ASC,"createAt");
+        long count = this.productsSoldRepo.findAllByCreatedBy(adminId).stream().count();
+        if(!date.equals("")){
+            try{
+                collect = this.productsSoldRepo
+                        .findAllByCreatedByAndCreatedAt(adminId,new SimpleDateFormat("yyyy-MM-dd").parse(date))
+                        .stream()
+                        .map(order -> this.modelMapper.map(order, ProductSoldDTO.class))
+                        .collect(Collectors.toList());
+            }catch (ParseException exception){
+                throw new Generic_Exception_Handling("Given Date is Not Valid");
+            }
+            System.err.println("Inside Date Section : "+date);
+            return collect;
+        }
+
+        
+        if(customerName.equals("") && date.equals("")) {
+             collect = this.productsSoldRepo
+                    .findAllByCreatedBy(adminId, pageRequest)
+                    .get()
+                    .map(order -> {
+                        ProductSoldDTO productSoldDTO = this.modelMapper.map(order, ProductSoldDTO.class);
+                        productSoldDTO.setTotalBills(count);
+                        return productSoldDTO;
+                    })
+                    .collect(Collectors.toList());
+            System.err.println("Inside Sells with Paging");
+            return collect;
+        }
+        if(!customerName.equals("") && customerName != null) {
+            collect = this.productsSoldRepo
+                    .findAllByCreatedByAndCustomerNameContaining(adminId,customerName, pageRequest)
+                    .get()
+                    .map(order -> {
+                        ProductSoldDTO productSoldDTO = this.modelMapper.map(order, ProductSoldDTO.class);
+                        productSoldDTO.setTotalBills(count);
+                        return productSoldDTO;
+                    })
+                    .collect(Collectors.toList());
+            System.err.println("Inside Customer Name Finding with paging");
+            return collect;
+        }else {
+            return new ArrayList<>();
+        }
     }
 
     @Override
@@ -93,6 +137,7 @@ public class ProductsSoldServiceImpl implements ProductsSoldService {
            for(Map.Entry entry:ref.productIdQuantity.entrySet() ){
                             Inventory inventory = this.inventoryRepo.findById((Long) entry.getKey()).get();
                             inventory.setQuantity(inventory.getQuantity()-(int)entry.getValue());
+                            inventory.setUpdateAt(new Date());
                             this.inventoryRepo.save(inventory);
                         }
         }else {

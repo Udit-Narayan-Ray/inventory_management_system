@@ -1,6 +1,10 @@
 package com.inventory.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class InvoiceProductDTO {
+
+    private String productId;
 
     private  String productName;
 
@@ -48,5 +52,13 @@ public class InvoiceProductDTO {
                 ", sellingPrice=" + sellingPrice +
                 ", productType='" + productType + '\'' +
                 '}';
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 }
