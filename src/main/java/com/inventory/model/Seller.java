@@ -12,7 +12,7 @@ public class Seller {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long sellerId;
 
-    @Column(nullable = false)
+    @Column(nullable = false,length = 20)
     private String userName;
 
     @Column(unique = true,nullable = false)

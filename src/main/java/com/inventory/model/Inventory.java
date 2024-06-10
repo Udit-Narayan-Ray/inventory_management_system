@@ -11,8 +11,9 @@ public class Inventory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
 
-    @Column(nullable = false)
+    @Column(nullable = false,length = 100)
     private  String productName;
+
 
     private double costPrice;
 
@@ -22,6 +23,7 @@ public class Inventory {
 
     private int quantity;
 
+    @Column(length = 30)
     private String productType;
 
     private boolean isActive;

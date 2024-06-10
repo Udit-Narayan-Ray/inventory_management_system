@@ -34,8 +34,7 @@ public class InventoryServiceImpl implements InventoryService {
         Inventory inventory = this.modelMapper.map(inventoryDto, Inventory.class);
         inventory.setCreatedAt(new Date());
         inventory.setUpdateAt(new Date());
-        inventory.setIsActive(inventoryDto.getIsActive()
-        );
+        inventory.setIsActive(inventoryDto.getIsActive());
         try {
             inventory.setCreatedBy(this.sellerRepo.findById(inventoryDto.getAdminId()).get());
         }

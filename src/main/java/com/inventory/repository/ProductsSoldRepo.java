@@ -20,7 +20,7 @@ public interface ProductsSoldRepo extends JpaRepository<ProductsSold,Long> {
     @Query("select order from ProductsSold order inner join order.createdBy seller where seller.sellerId = :sellerId and Date(order.createAt) = :date")
     public List<ProductsSold> findAllByCreatedByAndCreatedAt(@Param("sellerId")Long sellerId,@Param("date") Date date);
 
-    @Query("select order from ProductsSold order inner join order.createdBy seller where seller.sellerId =:sellerId and order.customerName like :customerName")
-    public Page<ProductsSold> findAllByCreatedByAndCustomerNameContaining(@Param("sellerId")Long sellerId,@Param("customerName")String customerName,Pageable pageable);
+    @Query("select order from ProductsSold order inner join order.createdBy seller where seller.sellerId =:sellerId and (order.customerName like CONCAT('%', :search,'%') or order.phoneNo like CONCAT('%', :search,'%'))")
+    public Page<ProductsSold> findAllByCreatedByAndSearch(@Param("sellerId")Long sellerId,@Param("search")String search,Pageable pageable);
 
 }

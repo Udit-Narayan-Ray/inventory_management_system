@@ -26,6 +26,8 @@ public class ProductsSoldController {
     @PostMapping(path = "/sells")
     public ResponseEntity<Object> placeOrder(@RequestBody ProductSoldDTO productSoldDTO){
 
+        productSoldDTO.setCustomerName(productSoldDTO.getCustomerName().trim());
+
         if(productSoldDTO.getAdminId() == null || productSoldDTO.getAdminId() == 0){
             throw new Generic_Exception_Handling("Please Provide Valid adminId");
         }
@@ -41,18 +43,17 @@ public class ProductsSoldController {
     @GetMapping(path = "/getSells")
     public ResponseEntity<Object> getOrders(
             @RequestParam(value = "adminId",defaultValue = "0")Long adminId,
-            @RequestParam(name = "customerName",defaultValue = "")String customerName,
+            @RequestParam(name = "search",defaultValue = "")String search,
             @RequestParam(value = "date",defaultValue = "")String date,
             @RequestParam(value = "page",defaultValue = "0")int page,
             @RequestParam(name = "size",defaultValue = "5")int size
     ) throws ParseException {
 
-
         if(adminId == 0){
             throw new Generic_Exception_Handling("Please Provide Valid adminId");
         }
         else {
-            return new ResponseEntity<>(this.productsSoldService.getSells(adminId, customerName, date,page, size), HttpStatus.OK);
+            return new ResponseEntity<>(this.productsSoldService.getSells(adminId, search, date,page, size), HttpStatus.OK);
         }
 
     }

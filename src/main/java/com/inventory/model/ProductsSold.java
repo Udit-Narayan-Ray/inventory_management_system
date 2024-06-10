@@ -18,9 +18,10 @@ public class ProductsSold {
 
     private double totalCost;
 
+    @Column(length = 50)
     private String customerName;
 
-    @Column(nullable = false)
+    @Column(nullable = false,length = 13)
     private String phoneNo;
 
     private String description;

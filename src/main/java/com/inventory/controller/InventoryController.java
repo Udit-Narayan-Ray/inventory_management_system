@@ -26,8 +26,16 @@ public class InventoryController {
         HttpStatus status;
         if(inventoryDto.getProductId() == null || inventoryDto.getProductId() == 0)
         {
-            this.inventoryService.addProduct(inventoryDto);
-            status = HttpStatus.CREATED;
+           if( this.inventoryService
+                    .getAllProducts(inventoryDto.getAdminId())
+                    .stream()
+                    .filter(inventoryCheck -> inventoryCheck.getProductName().equalsIgnoreCase(inventoryDto.getProductName().trim()))
+                    .count() == 0){
+               this.inventoryService.addProduct(inventoryDto);
+               status = HttpStatus.CREATED;
+           }else {
+               throw new Generic_Exception_Handling("Product Already Exists with Product Name :"+inventoryDto.getProductName()+" Try Updating It.");
+           }
         }
         else {
             this.inventoryService.updateProduct(inventoryDto);

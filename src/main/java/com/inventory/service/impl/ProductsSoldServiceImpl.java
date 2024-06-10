@@ -12,6 +12,7 @@ import com.inventory.repository.SellerRepo;
 import com.inventory.service.ProductsSoldService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -40,12 +41,12 @@ public class ProductsSoldServiceImpl implements ProductsSoldService {
     private ModelMapper modelMapper;
 
     @Override
-    public List<ProductSoldDTO> getSells(Long adminId, String customerName, String date,int page, int size)  {
+    public List<ProductSoldDTO> getSells(Long adminId, String search, String date,int page, int size)  {
         List<ProductSoldDTO> collect = null;
 
-        PageRequest pageRequest =PageRequest.of(page,size, Sort.Direction.ASC,"createAt");
+        PageRequest pageRequest =PageRequest.of(page,size, Sort.Direction.DESC,"createAt");
         long count = this.productsSoldRepo.findAllByCreatedBy(adminId).stream().count();
-        if(!date.equals("")){
+        if((!date.equals("") && date != null) && search.equals("")){
             try{
                 collect = this.productsSoldRepo
                         .findAllByCreatedByAndCreatedAt(adminId,new SimpleDateFormat("yyyy-MM-dd").parse(date))
@@ -58,9 +59,7 @@ public class ProductsSoldServiceImpl implements ProductsSoldService {
             System.err.println("Inside Date Section : "+date);
             return collect;
         }
-
-        
-        if(customerName.equals("") && date.equals("")) {
+        if(search.equals("") && date.equals("")) {
              collect = this.productsSoldRepo
                     .findAllByCreatedBy(adminId, pageRequest)
                     .get()
@@ -73,21 +72,48 @@ public class ProductsSoldServiceImpl implements ProductsSoldService {
             System.err.println("Inside Sells with Paging");
             return collect;
         }
-        if(!customerName.equals("") && customerName != null) {
-            collect = this.productsSoldRepo
-                    .findAllByCreatedByAndCustomerNameContaining(adminId,customerName, pageRequest)
-                    .get()
-                    .map(order -> {
-                        ProductSoldDTO productSoldDTO = this.modelMapper.map(order, ProductSoldDTO.class);
-                        productSoldDTO.setTotalBills(count);
-                        return productSoldDTO;
-                    })
-                    .collect(Collectors.toList());
-            System.err.println("Inside Customer Name Finding with paging");
+        if((!search.equals("") && search != null) && date.equals(""))  {
+
+            if(search.startsWith("OID-")){
+                Long sellId = Long.parseLong(search.substring(4));
+                Optional<ProductsSold> productsSold = this.productsSoldRepo.findById(sellId);
+                System.err.println("Inside Sells with orderId");
+                if(productsSold == null){
+                    return new ArrayList<>();
+                }
+                ProductSoldDTO productSoldDTO = this.modelMapper.map(productsSold.get(), ProductSoldDTO.class);
+                productSoldDTO.setTotalBills(1);
+                return List.of(productSoldDTO);
+            }else {
+
+                Page<ProductsSold> productsSoldPage = this.productsSoldRepo
+                        .findAllByCreatedByAndSearch(adminId, search, pageRequest);
+
+                long totalElements = productsSoldPage.getTotalElements();
+                collect = productsSoldPage
+                        .get()
+                        .map(order -> {
+                            ProductSoldDTO productSoldDTO = this.modelMapper.map(order, ProductSoldDTO.class);
+                            productSoldDTO.setTotalBills(totalElements);
+                            return productSoldDTO;
+                        })
+                        .collect(Collectors.toList());
+            }
+
+            System.err.println("Inside Searching with paging");
             return collect;
-        }else {
+        }
+
+        if((!search.equals("") && !date.equals("") ) || (search != null && date != null)){
+
+
+
+            return List.of();
+        }
+        else {
             return new ArrayList<>();
         }
+
     }
 
     @Override
