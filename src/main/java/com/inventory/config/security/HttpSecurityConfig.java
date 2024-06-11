@@ -67,7 +67,7 @@ public class HttpSecurityConfig {
         corsConfiguration.setAllowedHeaders(List.of("Content-Type","Authorization"));
 
         corsConfiguration.setAllowedMethods(List.of("GET","POST"));
-        corsConfiguration.setAllowedOrigins(List.of("http://localhost:8080","http://localhost:3000"));
+        corsConfiguration.setAllowedOrigins(List.of("http://localhost:8080","http://localhost:3000","http://192.168.12.37:3000"));
 
 
 

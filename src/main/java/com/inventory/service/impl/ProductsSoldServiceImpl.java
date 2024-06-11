@@ -41,11 +41,19 @@ public class ProductsSoldServiceImpl implements ProductsSoldService {
     private ModelMapper modelMapper;
 
     @Override
-    public List<ProductSoldDTO> getSells(Long adminId, String search, String date,int page, int size)  {
+    public List<ProductSoldDTO> getSells(Long adminId, String search, String date,int page, int size) throws ParseException {
         List<ProductSoldDTO> collect = null;
 
-        PageRequest pageRequest =PageRequest.of(page,size, Sort.Direction.DESC,"createAt");
-        long count = this.productsSoldRepo.findAllByCreatedBy(adminId).stream().count();
+        List<ProductsSold> productsSoldBySeller = this.productsSoldRepo.findAllByCreatedBy(adminId);
+        long count = productsSoldBySeller.stream().count();
+        if((page == 0 && size == 0) && (search.isBlank() && date.equals(""))){
+            System.err.println("Inside No Paging");
+            return productsSoldBySeller
+                    .stream()
+                    .map(productsSold -> this.modelMapper.map(productsSold, ProductSoldDTO.class))
+                    .collect(Collectors.toList());
+        }
+
         if((!date.equals("") && date != null) && search.equals("")){
             try{
                 collect = this.productsSoldRepo
@@ -59,8 +67,9 @@ public class ProductsSoldServiceImpl implements ProductsSoldService {
             System.err.println("Inside Date Section : "+date);
             return collect;
         }
+        PageRequest pageRequest =PageRequest.of(page,size, Sort.Direction.DESC,"createAt");
         if(search.equals("") && date.equals("")) {
-             collect = this.productsSoldRepo
+            collect = this.productsSoldRepo
                     .findAllByCreatedBy(adminId, pageRequest)
                     .get()
                     .map(order -> {
@@ -74,16 +83,23 @@ public class ProductsSoldServiceImpl implements ProductsSoldService {
         }
         if((!search.equals("") && search != null) && date.equals(""))  {
 
+
             if(search.startsWith("OID-")){
-                Long sellId = Long.parseLong(search.substring(4));
-                Optional<ProductsSold> productsSold = this.productsSoldRepo.findById(sellId);
-                System.err.println("Inside Sells with orderId");
-                if(productsSold == null){
-                    return new ArrayList<>();
+                try {
+                    Long sellId = Long.parseLong(search.substring(4));
+                    Optional<ProductsSold> productsSold = this.productsSoldRepo.findById(sellId);
+                    System.err.println("Inside Sells with orderId");
+                    if(productsSold == null){
+                        return new ArrayList<>();
+                    }
+                    ProductSoldDTO productSoldDTO = this.modelMapper.map(productsSold.get(), ProductSoldDTO.class);
+                    productSoldDTO.setTotalBills(1);
+                    return List.of(productSoldDTO);
+                }catch (NoSuchElementException exception){
+                    throw new Generic_Exception_Handling("No Sells Present with OrderId : "+search);
+
                 }
-                ProductSoldDTO productSoldDTO = this.modelMapper.map(productsSold.get(), ProductSoldDTO.class);
-                productSoldDTO.setTotalBills(1);
-                return List.of(productSoldDTO);
+
             }else {
 
                 Page<ProductsSold> productsSoldPage = this.productsSoldRepo
@@ -106,9 +122,16 @@ public class ProductsSoldServiceImpl implements ProductsSoldService {
 
         if((!search.equals("") && !date.equals("") ) || (search != null && date != null)){
 
+            List<ProductsSold> searchOrCreatedAt = this.productsSoldRepo.findAllByCreatedByAndSearchOrCreatedAt(adminId, search, new SimpleDateFormat("yyyy-MM-dd").parse(date));
 
-
-            return List.of();
+            System.err.println("Inside Either by Search Or Date");
+            if(searchOrCreatedAt == null){
+                return List.of();
+            }
+            return searchOrCreatedAt
+                    .stream()
+                    .map(searchOrCreateAt->this.modelMapper.map(searchOrCreateAt, ProductSoldDTO.class))
+                    .collect(Collectors.toList());
         }
         else {
             return new ArrayList<>();

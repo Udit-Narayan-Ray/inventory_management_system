@@ -46,9 +46,9 @@ public class ProductsSoldController {
             @RequestParam(name = "search",defaultValue = "")String search,
             @RequestParam(value = "date",defaultValue = "")String date,
             @RequestParam(value = "page",defaultValue = "0")int page,
-            @RequestParam(name = "size",defaultValue = "5")int size
+            @RequestParam(name = "size",defaultValue = "0")int size
     ) throws ParseException {
-
+        System.err.println("SELLS");
         if(adminId == 0){
             throw new Generic_Exception_Handling("Please Provide Valid adminId");
         }
