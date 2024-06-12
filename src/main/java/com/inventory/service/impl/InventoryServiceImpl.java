@@ -31,6 +31,7 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     public void addProduct(InventoryDto inventoryDto) {
 
+        inventoryDto.setProductName(inventoryDto.getProductName().trim());
         Inventory inventory = this.modelMapper.map(inventoryDto, Inventory.class);
         inventory.setCreatedAt(new Date());
         inventory.setUpdateAt(new Date());
@@ -42,7 +43,18 @@ public class InventoryServiceImpl implements InventoryService {
             throw new Generic_Exception_Handling("No User Found With userId : "+inventoryDto.getAdminId());
         }
 
-        this.inventoryRepo.save(inventory);
+        if( this.inventoryRepo
+                .findAllByCreatedBy(inventoryDto.getAdminId())
+                .stream()
+                .filter(inventoryCheck -> inventoryCheck.getProductName().equalsIgnoreCase(inventoryDto.getProductName()))
+                .count() == 0){
+            this.inventoryRepo.save(inventory);
+        }else {
+            throw new Generic_Exception_Handling("Product Already Exists with Product Name :"+inventoryDto.getProductName()+" Try Updating It.");
+        }
+
+
+
     }
 
     @Override
@@ -52,9 +64,9 @@ public class InventoryServiceImpl implements InventoryService {
         try {
             inventory = this.inventoryRepo.findById(inventoryDto.getProductId()).get();
         }catch (NoSuchElementException exception){
-            throw new Generic_Exception_Handling("No Product Exists With productId : "+inventoryDto.getProductId());
+            throw new Generic_Exception_Handling("No Product Exists With productId : "+inventoryDto.getId());
         }
-        if(inventoryDto.getQuantity() != 0 ){
+        if(inventoryDto.getQuantity() > 0 ){
             inventory.setQuantity(inventoryDto.getQuantity());
         }
         if(inventoryDto.getIsActive() == true){

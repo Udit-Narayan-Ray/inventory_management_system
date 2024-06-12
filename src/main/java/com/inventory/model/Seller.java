@@ -10,9 +10,9 @@ public class Seller {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long sellerId;
+    private Long id;
 
-    @Column(nullable = false,length = 20)
+    @Column(nullable = false,length = 50)
     private String userName;
 
     @Column(unique = true,nullable = false)
@@ -36,7 +36,7 @@ public class Seller {
 
     public Seller(Long sellerId, String userName, String email, String password,
                    Role role, boolean active, Date createdAt, Date updateAt) {
-        this.sellerId = sellerId;
+        this.id = sellerId;
         this.userName = userName;
         this.email = email;
         this.password = password;
@@ -46,12 +46,12 @@ public class Seller {
         this.updateAt = updateAt;
     }
 
-    public Long getSellerId() {
-        return sellerId;
+    public Long getId() {
+        return id;
     }
 
-    public void setSellerId(Long sellerId) {
-        this.sellerId = sellerId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUserName() {
@@ -122,7 +122,7 @@ public class Seller {
     @Override
     public String toString() {
         return "Seller{" +
-                "sellerId=" + sellerId +
+                "id=" + id +
                 ", userName='" + userName + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +

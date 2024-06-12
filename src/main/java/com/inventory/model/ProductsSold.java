@@ -10,10 +10,10 @@ public class ProductsSold {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long sellId;
+    private Long id;
 
     @OneToMany(cascade = CascadeType.PERSIST,fetch = FetchType.LAZY)
-    @JoinColumn(name = "sell_id")
+    @JoinColumn(name = "product_sold_id")
     private List<ProductsSoldDetails> products;
 
     private double totalCost;
@@ -27,7 +27,7 @@ public class ProductsSold {
     private String description;
 
     @ManyToOne(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
-    @JoinColumn(name = "seller_id")
+    @JoinColumn(name = "created_by")
     private Seller createdBy;
 
     @Column(nullable = false)
@@ -38,9 +38,9 @@ public class ProductsSold {
     public ProductsSold() {
     }
 
-    public ProductsSold(Long sellId, List<ProductsSoldDetails> products, double totalCost,
+    public ProductsSold(Long id, List<ProductsSoldDetails> products, double totalCost,
                         String customerName, String phoneNo, String description, Seller createdBy, Date createAt, Date updateAt) {
-        this.sellId = sellId;
+        this.id = id;
         this.products = products;
         this.totalCost = totalCost;
         this.customerName = customerName;
@@ -51,12 +51,12 @@ public class ProductsSold {
         this.updateAt = updateAt;
     }
 
-    public Long getSellId() {
-        return sellId;
+    public Long getId() {
+        return id;
     }
 
-    public void setSellId(Long sellId) {
-        this.sellId = sellId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public List<ProductsSoldDetails> getProducts() {
@@ -128,7 +128,7 @@ public class ProductsSold {
     @Override
     public String toString() {
         return "ProductsSold{" +
-                "sellId=" + sellId +
+                "id=" + id +
                 ", products=" + products +
                 ", totalCost=" + totalCost +
                 ", customerName='" + customerName + '\'' +

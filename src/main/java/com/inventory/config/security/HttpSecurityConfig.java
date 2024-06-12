@@ -4,7 +4,6 @@ import com.inventory.config.token.JWTAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -67,7 +66,7 @@ public class HttpSecurityConfig {
         corsConfiguration.setAllowedHeaders(List.of("Content-Type","Authorization"));
 
         corsConfiguration.setAllowedMethods(List.of("GET","POST"));
-        corsConfiguration.setAllowedOrigins(List.of("http://localhost:8080","http://localhost:3000","http://192.168.12.37:3000"));
+        corsConfiguration.setAllowedOrigins(List.of("http://localhost:8080","http://localhost:3000","http://192.168.12.37:3000","http://192.168.12.56:3000"));
 
 
 

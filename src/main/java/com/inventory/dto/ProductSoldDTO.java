@@ -14,7 +14,7 @@ public class ProductSoldDTO {
         private String orderId;
 
         @JsonIgnore
-        private Long sellId;
+        private Long id;
 
         private String customerName;
 
@@ -42,7 +42,7 @@ public class ProductSoldDTO {
                               String phoneNo, double totalCost, String description, List<ProductSoldDetailsDTO> products) {
                 this.adminId = adminId;
                 this.orderId = orderId;
-                this.sellId = sellId;
+                this.id = sellId;
                 this.customerName = customerName;
                 this.phoneNo = phoneNo;
             this.totalCost = totalCost;
@@ -59,19 +59,19 @@ public class ProductSoldDTO {
         }
 
         public String getOrderId() {
-                return "OID-"+this.sellId;
+                return "OID-"+this.id;
         }
 
         public void setOrderId(String orderId) {
                 this.orderId = orderId;
         }
 
-        public Long getSellId() {
-                return sellId;
+        public Long getId() {
+                return id;
         }
 
-        public void setSellId(Long sellId) {
-                this.sellId = sellId;
+        public void setId(Long id) {
+                this.id = id;
         }
 
         public String getCustomerName() {
@@ -111,7 +111,7 @@ public class ProductSoldDTO {
                 return "ProductSoldDTO{" +
                         "adminId=" + adminId +
                         ", orderId='" + orderId + '\'' +
-                        ", sellId=" + sellId +
+                        ", id=" + id +
                         ", customerName='" + customerName + '\'' +
                         ", phoneNo='" + phoneNo + '\'' +
                         ", description='" + description + '\'' +

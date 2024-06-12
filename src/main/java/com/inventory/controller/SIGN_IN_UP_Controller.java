@@ -37,7 +37,7 @@ public class SIGN_IN_UP_Controller {
         }
         String generatedToken = this.jwtService.generateToken(sellerDto.getEmail());
 
-        return new ResponseEntity(new TokenDto(sellerDto1.getSellerId(),sellerDto1.getUserName(),sellerDto.getEmail(),generatedToken
+        return new ResponseEntity(new TokenDto(sellerDto1.getId(),sellerDto1.getUserName(),sellerDto.getEmail(),generatedToken
         ), HttpStatus.OK);
     }
 

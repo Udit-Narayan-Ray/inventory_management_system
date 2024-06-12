@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class InventoryDto {
 
+    @JsonIgnore
+    private Long id;
+
     private Long productId;
 
     private  String productName;
@@ -31,12 +34,12 @@ public class InventoryDto {
 
     private Long adminId;
 
-    public Long getProductId() {
-        return productId;
+    public Long getId() {
+        return id;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getProductName() {
@@ -96,7 +99,7 @@ public class InventoryDto {
     }
 
     public String getProductCode() {
-        return "PC-"+productId;
+        return "PC-"+ id;
     }
 
     public void setProductCode(String productCode) {
@@ -121,7 +124,7 @@ public class InventoryDto {
     @Override
     public String toString() {
         return "InventoryDto{" +
-                "productId=" + productId +
+                "id=" + id +
                 ", productName='" + productName + '\'' +
                 ", costPrice=" + costPrice +
                 ", sellingPrice=" + sellingPrice +
@@ -145,5 +148,15 @@ public class InventoryDto {
     }
 
 
+    public Long getProductId() {
+        if(id != null){
+            return id;
+        }
+        return productId;
+    }
 
+    public void setProductId(Long productId) {
+        this.productId = productId;
+        this.id = productId;
+    }
 }

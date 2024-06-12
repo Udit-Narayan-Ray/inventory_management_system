@@ -4,7 +4,7 @@ import com.inventory.enums.Role;
 
 public class SellerDto {
 
-    private Long sellerId;
+    private Long id;
     private String userName;
     private String email;
     private String password;
@@ -13,8 +13,8 @@ public class SellerDto {
     public SellerDto() {
     }
 
-    public SellerDto(Long sellerId, String userName, String email, String password, Role role) {
-        this.sellerId = sellerId;
+    public SellerDto(Long id, String userName, String email, String password, Role role) {
+        this.id = id;
         this.userName = userName;
         this.email = email;
         this.password = password;
@@ -53,18 +53,18 @@ public class SellerDto {
         this.userName = userName;
     }
 
-     public Long getSellerId() {
-        return sellerId;
+     public Long getId() {
+        return id;
     }
 
-    public void setSellerId(Long sellerId) {
-        this.sellerId = sellerId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override
     public String toString() {
         return "SellerDto{" +
-                "sellerId=" + sellerId +
+                "id=" + id +
                 ", userName='" + userName + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +

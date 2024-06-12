@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface InventoryRepo extends JpaRepository<Inventory,Long> {
 
-    @Query("select inv from Inventory inv inner join inv.createdBy s where s.sellerId = :sellerId")
+    @Query("select inv from Inventory inv inner join inv.createdBy s where s.id = :sellerId")
     public List<Inventory> findAllByCreatedBy(@Param("sellerId")Long sellerId);
 }

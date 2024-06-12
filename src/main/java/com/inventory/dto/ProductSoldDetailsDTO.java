@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class ProductSoldDetailsDTO {
 
 
+    @JsonIgnore
+    private Long id;
+
     private Long productId;
 
     private String productCode;
@@ -25,18 +28,18 @@ public class ProductSoldDetailsDTO {
     public ProductSoldDetailsDTO() {
     }
 
-    public ProductSoldDetailsDTO(Long productId, int quantity, InvoiceProductDTO inventory) {
-        this.productId = productId;
+    public ProductSoldDetailsDTO(Long id, int quantity, InvoiceProductDTO inventory) {
+        this.id = id;
         this.quantity = quantity;
         this.inventory = inventory;
     }
 
-    public Long getProductId() {
-        return productId;
+    public Long getId() {
+        return id;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public int getQuantity() {
@@ -59,7 +62,7 @@ public class ProductSoldDetailsDTO {
     @Override
     public String toString() {
         return "ProductSoldDetailsDTO{" +
-                "productId=" + productId +
+                "id=" + id +
                 ", quantity=" + quantity +
                 ", inventory=" + inventory +
                 '}';
@@ -103,10 +106,21 @@ public class ProductSoldDetailsDTO {
     }
 
     public String getProductCode() {
-        return this.inventory == null?productCode:"PC-"+this.inventory.getProductId();
+        return this.inventory == null?productCode:"PC-"+this.inventory.getId();
     }
 
     public void setProductCode(String productCode) {
         this.productCode = productCode;
+    }
+
+    public Long getProductId() {
+        if(id != null){
+            return id;
+        }
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 }

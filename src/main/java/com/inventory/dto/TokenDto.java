@@ -6,7 +6,7 @@ public class TokenDto {
 
     private Long adminId;
     @JsonIgnore
-    private Long sellerId;
+    private Long id;
     private String userName;
     private String email;
     private String jwtToken;
@@ -14,8 +14,8 @@ public class TokenDto {
     public TokenDto() {
     }
 
-    public TokenDto(Long sellerId, String userName, String email, String jwtToken) {
-        this.sellerId = sellerId;
+    public TokenDto(Long id, String userName, String email, String jwtToken) {
+        this.id = id;
         this.userName = userName;
         this.email = email;
         this.jwtToken = jwtToken;
@@ -46,18 +46,18 @@ public class TokenDto {
     }
 
 
-    public Long getSellerId() {
-        return sellerId;
+    public Long getId() {
+        return id;
     }
 
-    public void setSellerId(Long sellerId) {
-        this.sellerId = sellerId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override
     public String toString() {
         return "TokenDto{" +
-                "sellerId='" + sellerId + '\'' +
+                "id='" + id + '\'' +
                 ", userName='" + userName + '\'' +
                 ", email='" + email + '\'' +
                 ", jwtToken='" + jwtToken + '\'' +
@@ -65,10 +65,10 @@ public class TokenDto {
     }
 
     public Long getAdminId() {
-        return this.sellerId;
+        return this.id;
     }
 
     public void setAdminId(Long adminId) {
-        this.adminId = sellerId;
+        this.adminId = id;
     }
 }

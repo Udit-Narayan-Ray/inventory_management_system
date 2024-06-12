@@ -46,20 +46,36 @@ public class ProductsSoldServiceImpl implements ProductsSoldService {
 
         List<ProductsSold> productsSoldBySeller = this.productsSoldRepo.findAllByCreatedBy(adminId);
         long count = productsSoldBySeller.stream().count();
-        if((page == 0 && size == 0) && (search.isBlank() && date.equals(""))){
+        if((page == 0 && size == 0) && search.isBlank()) {
+
             System.err.println("Inside No Paging");
-            return productsSoldBySeller
-                    .stream()
-                    .map(productsSold -> this.modelMapper.map(productsSold, ProductSoldDTO.class))
-                    .collect(Collectors.toList());
+            if (!date.isEmpty()) {
+                return this.productsSoldRepo
+                        .findAllByCreatedByAndCreatedAt(adminId,new SimpleDateFormat("yyyy-MM-dd").parse(date))
+                        .stream()
+                        .map(productsSold -> this.modelMapper.map(productsSold, ProductSoldDTO.class))
+                        .collect(Collectors.toList());
+            } else {
+                return productsSoldBySeller
+                        .stream()
+                        .map(productsSold -> this.modelMapper.map(productsSold, ProductSoldDTO.class))
+                        .collect(Collectors.toList());
+            }
         }
+        PageRequest pageRequest =PageRequest.of(page,size, Sort.Direction.DESC,"createAt");
 
         if((!date.equals("") && date != null) && search.equals("")){
             try{
-                collect = this.productsSoldRepo
-                        .findAllByCreatedByAndCreatedAt(adminId,new SimpleDateFormat("yyyy-MM-dd").parse(date))
-                        .stream()
-                        .map(order -> this.modelMapper.map(order, ProductSoldDTO.class))
+                Page<ProductsSold> createdByAndCreatedAt = this.productsSoldRepo
+                        .findAllByCreatedByAndCreatedAt(adminId, new SimpleDateFormat("yyyy-MM-dd").parse(date), pageRequest);
+
+                       collect  = createdByAndCreatedAt
+                        .get()
+                        .map(order -> {
+                            ProductSoldDTO productSoldDTO = this.modelMapper.map(order, ProductSoldDTO.class);
+                            productSoldDTO.setTotalBills(createdByAndCreatedAt.getTotalElements());
+                            return productSoldDTO;
+                        })
                         .collect(Collectors.toList());
             }catch (ParseException exception){
                 throw new Generic_Exception_Handling("Given Date is Not Valid");
@@ -67,7 +83,6 @@ public class ProductsSoldServiceImpl implements ProductsSoldService {
             System.err.println("Inside Date Section : "+date);
             return collect;
         }
-        PageRequest pageRequest =PageRequest.of(page,size, Sort.Direction.DESC,"createAt");
         if(search.equals("") && date.equals("")) {
             collect = this.productsSoldRepo
                     .findAllByCreatedBy(adminId, pageRequest)
@@ -96,6 +111,7 @@ public class ProductsSoldServiceImpl implements ProductsSoldService {
                     productSoldDTO.setTotalBills(1);
                     return List.of(productSoldDTO);
                 }catch (NoSuchElementException exception){
+
                     throw new Generic_Exception_Handling("No Sells Present with OrderId : "+search);
 
                 }
@@ -122,15 +138,19 @@ public class ProductsSoldServiceImpl implements ProductsSoldService {
 
         if((!search.equals("") && !date.equals("") ) || (search != null && date != null)){
 
-            List<ProductsSold> searchOrCreatedAt = this.productsSoldRepo.findAllByCreatedByAndSearchOrCreatedAt(adminId, search, new SimpleDateFormat("yyyy-MM-dd").parse(date));
-
+            Page<ProductsSold> searchOrCreatedAt = this.productsSoldRepo.findAllByCreatedByAndSearchAndCreatedAt(adminId, search, new SimpleDateFormat("yyyy-MM-dd").parse(date),pageRequest);
+            long totalElements = searchOrCreatedAt.getTotalElements();
             System.err.println("Inside Either by Search Or Date");
             if(searchOrCreatedAt == null){
                 return List.of();
             }
             return searchOrCreatedAt
                     .stream()
-                    .map(searchOrCreateAt->this.modelMapper.map(searchOrCreateAt, ProductSoldDTO.class))
+                    .map(searchOrCreateAt->{
+                        ProductSoldDTO productSoldDTO = this.modelMapper.map(searchOrCreateAt, ProductSoldDTO.class);
+                        productSoldDTO.setTotalBills(totalElements);
+                        return productSoldDTO;
+                    })
                     .collect(Collectors.toList());
         }
         else {
@@ -145,8 +165,11 @@ public class ProductsSoldServiceImpl implements ProductsSoldService {
             HashMap<Long,Integer> productIdQuantity =new HashMap<>();
             double calculatedPrices = 0;
         };
-        ProductsSold productsSold = this.modelMapper.map(productSoldDTO, ProductsSold.class);
+        productSoldDTO.setPhoneNo(productSoldDTO.getPhoneNo().trim().replace(" ",""));
+        productSoldDTO.setCustomerName(productSoldDTO.getCustomerName().trim());
+        productSoldDTO.setDescription(productSoldDTO.getCustomerName().trim());
 
+        ProductsSold productsSold = this.modelMapper.map(productSoldDTO, ProductsSold.class);
 
         productsSold.setProducts(
                 productSoldDTO
@@ -159,15 +182,15 @@ public class ProductsSoldServiceImpl implements ProductsSoldService {
                             try {
                                 inventory = this.inventoryRepo.findById(sells.getProductId()).get();
                                 ref.calculatedPrices += inventory.getSellingPrice()*sells.getQuantity();
-                                ref.productIdQuantity.put(inventory.getProductId(),sells.getQuantity());
+                                ref.productIdQuantity.put(inventory.getId(),sells.getQuantity());
                                 productsSoldDetails.setInventory(inventory);
                             } catch (NoSuchElementException exception) {
-                                throw new Generic_Exception_Handling("No Product Exist With ProductId :" + sells.getProductId());
+                                throw new Generic_Exception_Handling("No Product Exist With ProductId :" + sells.getId());
                             }
                             if((inventory.getQuantity()-sells.getQuantity())>=0) {
                                 productsSoldDetails.setQuantity(sells.getQuantity());
                             }else{
-                                throw new Generic_Exception_Handling("Quantity Provided for the productId : "+sells.getProductId()+" is More than Current Stock");
+                                throw new Generic_Exception_Handling("Quantity Provided for the productId : "+sells.getId()+" is More than Current Stock");
                             }
                             return productsSoldDetails;
                         })

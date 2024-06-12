@@ -7,13 +7,13 @@ public class ProductsSoldDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long slNo;
+    private Long id;
 
     @Column(nullable = false)
     private int quantity;
 
     @ManyToOne(cascade = CascadeType.PERSIST,fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "inventory_id")
     private Inventory inventory;
 
 
@@ -21,17 +21,17 @@ public class ProductsSoldDetails {
     }
 
     public ProductsSoldDetails(Long slNo, int quantity, Inventory inventory) {
-        this.slNo = slNo;
+        this.id = slNo;
         this.quantity = quantity;
         this.inventory = inventory;
     }
 
-    public Long getSlNo() {
-        return slNo;
+    public Long getId() {
+        return id;
     }
 
-    public void setSlNo(Long slNo) {
-        this.slNo = slNo;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public int getQuantity() {
@@ -55,7 +55,7 @@ public class ProductsSoldDetails {
     @Override
     public String toString() {
         return "ProductsSoldDetails{" +
-                "slNo=" + slNo +
+                "id=" + id +
                 ", quantity=" + quantity +
                 ", inventory=" + inventory +
                 '}';

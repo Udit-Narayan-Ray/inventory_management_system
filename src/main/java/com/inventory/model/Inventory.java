@@ -9,7 +9,7 @@ public class Inventory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long productId;
+    private Long id;
 
     @Column(nullable = false,length = 100)
     private  String productName;
@@ -23,13 +23,13 @@ public class Inventory {
 
     private int quantity;
 
-    @Column(length = 30)
+    @Column(length = 50)
     private String productType;
 
     private boolean isActive;
 
     @ManyToOne(cascade = CascadeType.PERSIST,fetch = FetchType.LAZY)
-    @JoinColumn(name = "seller_id")
+    @JoinColumn(name = "created_by")
     private Seller createdBy;
 
     @Column(nullable = false)
@@ -44,7 +44,7 @@ public class Inventory {
                      int minQuantity, int quantity, String productType,
                      boolean isActive, Seller createdBy, Date createdAt, Date updateAt) {
         this.productName = productName;
-        this.productId = productId;
+        this.id = productId;
         this.costPrice = costPrice;
         this.sellingPrice = sellingPrice;
         this.minQuantity = minQuantity;
@@ -56,12 +56,12 @@ public class Inventory {
         this.updateAt = updateAt;
     }
 
-    public Long getProductId() {
-        return productId;
+    public Long getId() {
+        return id;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getProductName() {
@@ -147,7 +147,7 @@ public class Inventory {
     @Override
     public String toString() {
         return "Inventory{" +
-                "productId=" + productId +
+                "id=" + id +
                 ", productName='" + productName + '\'' +
                 ", costPrice=" + costPrice +
                 ", sellingPrice=" + sellingPrice +
