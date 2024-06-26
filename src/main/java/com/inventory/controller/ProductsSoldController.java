@@ -51,7 +51,6 @@ public class ProductsSoldController {
             @RequestParam(value = "page",defaultValue = "0")int page,
             @RequestParam(name = "size",defaultValue = "0")int size
     ) throws ParseException {
-    logger.warn("INSIDE SELLS");
     if(adminId == 0){
             throw new Generic_Exception_Handling("Please Provide Valid adminId");
         }

@@ -1,13 +1,16 @@
 package com.inventory.config;
 
+import com.inventory.aspect.MyAspect;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.multipart.MultipartFile;
 
 @Configuration
+@EnableAspectJAutoProxy
 public class JavaConfig {
 
     @Bean
@@ -16,8 +19,13 @@ public class JavaConfig {
     }
 
     @Bean
-    PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public MyAspect myAspect(){
+        return new MyAspect();
     }
 
 }

@@ -167,7 +167,7 @@ public class ProductsSoldServiceImpl implements ProductsSoldService {
         };
         productSoldDTO.setPhoneNo(productSoldDTO.getPhoneNo().trim().replace(" ",""));
         productSoldDTO.setCustomerName(productSoldDTO.getCustomerName().trim());
-        productSoldDTO.setDescription(productSoldDTO.getCustomerName().trim());
+        productSoldDTO.setDescription(productSoldDTO.getDescription().trim());
 
         ProductsSold productsSold = this.modelMapper.map(productSoldDTO, ProductsSold.class);
 

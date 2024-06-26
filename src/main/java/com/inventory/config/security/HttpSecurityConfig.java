@@ -41,7 +41,7 @@ public class HttpSecurityConfig {
 
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry
-                                .requestMatchers("/ims/signin", "/ims/signup").permitAll()
+                                .requestMatchers("/ims/signin", "/ims/signup","/data").permitAll()
                                 .anyRequest()
                                 .authenticated()
                 )
@@ -66,7 +66,8 @@ public class HttpSecurityConfig {
         corsConfiguration.setAllowedHeaders(List.of("Content-Type","Authorization"));
 
         corsConfiguration.setAllowedMethods(List.of("GET","POST"));
-        corsConfiguration.setAllowedOrigins(List.of("http://localhost:8080","http://localhost:3000","http://192.168.12.37:3000","http://192.168.12.56:3000"));
+        corsConfiguration.setAllowedOrigins(List.of("http://localhost:8080","http://localhost:3000",
+                "http://192.168.12.37:3000","http://192.168.12.56:3000","http://localhost:3001"));
 
 
 
